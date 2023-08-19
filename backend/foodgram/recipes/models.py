@@ -50,7 +50,9 @@ class Ingredient(models.Model):
     )
 
     class Meta:
-        verbose_name = "Ингредиенты"
+        ordering = ["name"]
+        verbose_name = "Ингредиент"
+        verbose_name_plurar = "Ингредиенты"
 
     def __str__(self):
         return f"{self.name}, {self.measurement_unit}"
