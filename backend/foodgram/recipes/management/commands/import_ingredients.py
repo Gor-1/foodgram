@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     def handle(self, **options):
-        with open("ingredients.csv") as f:
+        with open("/app/foodgram/data/ingredients.csv") as f:
             for line in f:
                 ing = line.split(',')
                 Ingredient.objects.get_or_create(
