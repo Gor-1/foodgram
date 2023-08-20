@@ -14,6 +14,7 @@ from rest_framework.views import APIView
 from recipes import models
 from api import serializers
 from .filters import IngredientFilter, RecipeFilter
+from django.db.models import Sum
 
 
 class TagView(viewsets.ModelViewSet):
@@ -152,30 +153,22 @@ def download_shopping_cart(request):
     Формирует txt файл со списком
     покупок ингредиентов из ShoppingCart
     """
-
-    user = request.user
-    shopping_cart = user.shopping_cart.all()
-    buying_list = {}
-    for record in shopping_cart:
-        recipe = record.recipe
-        ingredients = models.IngredientInRecipe.objects.filter(recipe=recipe)
-        for ingredient in ingredients:
-            amount = ingredient.amount
-            name = ingredient.ingredient.name
-            measurement_unit = ingredient.ingredient.measurement_unit
-            if name not in buying_list:
-                buying_list[name] = {
-                    "measurement_unit": measurement_unit,
-                    "amount": amount,
-                }
-            else:
-                buying_list[name]["amount"] = (
-                    buying_list[name]["amount"] + amount
-                )
-    wishlist = []
-    for name, data in buying_list.items():
-        wishlist.append(
-            f"{name} - {data['amount']} {data['measurement_unit']}\n"
+    ingredients = (
+        models.IngredientInRecipe.objects
+        .filter(recipe__shopping_cart__user=request.user)
+        .values('ingredient')
+        .annotate(total_amount=Sum('amount'))
+        .values_list(
+            'ingredient__name', 'total_amount',
+            'ingredient__measurement_unit'
         )
-    response = HttpResponse(wishlist, content_type="text/plain")
-    return response
+    )
+    wishlist = []
+    [wishlist.append(
+        '{} - {} {}.'.format(*ingredient)) for ingredient in ingredients]
+    txtfile = HttpResponse(
+        'Cписок покупок:\n' + '\n'.join(wishlist),
+        content_type='text/plain'
+    )
+    txtfile['Content-Disposition'] = ('attachment; filename=Shoping list')
+    return txtfile

@@ -18,7 +18,9 @@ from .serializers import (
 )
 from .models import Follow
 
+
 User = get_user_model()
+PAGINATOR_SIZE = 6
 
 
 class CustomUserViewSet(viewsets.ModelViewSet):
@@ -102,7 +104,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         for follow_obj in follow:
             user_obj.append(follow_obj.following)
         paginator = PageNumberPagination()
-        paginator.page_size = 6
+        paginator.page_size = PAGINATOR_SIZE
         result_page = paginator.paginate_queryset(user_obj, request)
         serializer = ShowFollowerSerializer(
             result_page, many=True, context={"current_user": user}

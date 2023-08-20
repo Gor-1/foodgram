@@ -1,9 +1,13 @@
-# praktikum_new_diplom
-How to start program.
+<h1>Продуктовый помощник</h1> 
+дипломный проект курса Backend-разработки Яндекс.Практикум. Проект представляет собой онлайн-сервис и API для него.
 
-1: cd infra : docker compose up
-2: docker exec -it backend /bin/bash
-3: makemigrations and migrate (users and recipes)
-4: python manage.py collectstatic (static files copies to '/app/foodgram/static')
-5: python manage.py import_ingredients (import ingredients)
-cp -R /app/foodgram/media/ /var/html/
+<h2>Развертывание проекта</h2>
+
+1: Создайте файл /infra/.env. Шаблон для заполнения файла нахоится в /infra/.env.example.
+2: Выполните команду docker-compose up.
+3: Выполните миграции docker-compose exec backend python manage.py migrate
+4: Соберите статику docker-compose exec backend python manage.py collectstatic
+5: Заполните базу ингредиентами docker-compose exec backend python manage.py import_ingredients
+
+<h2>Автор</h2>
+<a href="https://t.me/Gcodm">Гор Галстян</a>

@@ -11,6 +11,7 @@ from .views import (
     download_shopping_cart,
 )
 
+
 router = DefaultRouter()
 router.register(r"tags", TagView, basename="tags")
 router.register(r"ingredients", IngredientsView, basename="ingredients")
