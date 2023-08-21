@@ -7,10 +7,22 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ("username",)
 
-    email = models.EmailField(max_length=254, unique=True)
-    username = models.CharField(max_length=150, unique=True)
-    first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
+    email = models.EmailField(
+        max_length=254,
+        unique=True,
+        verbose_name="Почта")
+    username = models.CharField(
+        max_length=150,
+        unique=True,
+        verbose_name="Имя Пользователя")
+    first_name = models.CharField(
+        max_length=150,
+        blank=True,
+        verbose_name="Имя")
+    last_name = models.CharField(
+        max_length=150,
+        blank=True,
+        verbose_name="Фамилия")
 
     class Meta:
         verbose_name = 'Пользователь'
@@ -19,10 +31,15 @@ class User(AbstractUser):
 
 class Follow(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="follower"
+        User, on_delete=models.CASCADE,
+        related_name="follower",
+        verbose_name="Подписчик"
     )
     following = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="following"
+        User,
+        on_delete=models.CASCADE,
+        related_name="following",
+        verbose_name="Подписан"
     )
 
     def __str__(self):
