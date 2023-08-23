@@ -13,4 +13,4 @@ class UserAdmin(admin.ModelAdmin):
 @register(models.Follow)
 class FollowAdmin(admin.ModelAdmin):
     fields = ("user", "following")
-    search_fields = ("user")
+    search_fields = ("user",)
