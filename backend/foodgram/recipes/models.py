@@ -110,6 +110,9 @@ class TagsInRecipe(models.Model):
         verbose_name = "Теги в рецепте"
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return f"{self.tag} - {self.recipe}"
+
 
 class IngredientInRecipe(models.Model):
     ingredient = models.ForeignKey(
@@ -127,6 +130,9 @@ class IngredientInRecipe(models.Model):
     class Meta:
         verbose_name = "Количетсво ингредиента в рецепте"
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.ingredient
 
 
 class Favorite(models.Model):

@@ -1,0 +1,45 @@
+version: '3.8'
+
+volumes:
+  postgres_data:
+  static:
+  media:
+
+services:
+  db:
+    image: postgres:12.4
+    restart: always
+    container_name: db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+
+  backend:
+    image: gcodm/foodgram_backend
+    volumes:
+      - static:/app/foodgram/collected_static/
+      - media:/app/foodgram/media/
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+
+  frontend:
+    image: gcodm/foodgram_frontend
+    volumes:
+      - ../frontend/:/app/result_build/
+
+  nginx:
+    image: gcodm/foodgram_gateway
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ../frontend/build:/usr/share/nginx/html/
+      - ../docs/:/usr/share/nginx/html/api/docs/
+      - static:/var/html/static/
+      - media:/var/html/media/
+    depends_on:
+      - backend
