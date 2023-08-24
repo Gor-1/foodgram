@@ -12,7 +12,6 @@
 <h2>Автор</h2>
 <a href="https://t.me/Gcodm">Гор Галстян</a>
 
+domen: https://g-foodgram.sytes.net/
 login superuser: g@mail.ru
 password superuser: g
-
-login 
