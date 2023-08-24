@@ -6,6 +6,16 @@ class IngredientsInLine(admin.TabularInline):
     model = models.Recipe.ingredients.through
 
 
+@admin.register(models.Ingredient)
+class IngredientAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "measurement_unit",
+    )
+    search_fields = ("name",)
+    list_filter = ("name",)
+
+
 @admin.register(models.Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     inlines = [

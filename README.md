@@ -11,3 +11,8 @@
 
 <h2>Автор</h2>
 <a href="https://t.me/Gcodm">Гор Галстян</a>
+
+login superuser: g@mail.ru
+password superuser: g
+
+login 
