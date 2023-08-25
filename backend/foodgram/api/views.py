@@ -38,7 +38,7 @@ class RecipeView(viewsets.ModelViewSet):
     queryset = models.Recipe.objects.all()
     permissions = [IsAuthenticatedOrReadOnly, ]
     filter_backends = [DjangoFilterBackend, ]
-    filter_class = RecipeFilter
+    filter_class = RecipeFilter, 
     pagination_class = PageNumberPagination
 
     def get_serializer_class(self):

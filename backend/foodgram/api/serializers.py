@@ -83,10 +83,15 @@ class AddIngredientToRecipeSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(
         queryset=models.Ingredient.objects.all()
     )
+    amount = serializers.IntegerField()
 
     class Meta:
         model = models.IngredientInRecipe
         fields = ("id", "amount")
+
+    def validate_amount(self, data):
+        if data <= 0:
+            raise serializers.ValidationError("Введите число больше 0!")
 
 
 class CreateRecipeSerializer(serializers.ModelSerializer):
