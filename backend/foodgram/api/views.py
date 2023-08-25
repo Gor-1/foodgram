@@ -56,6 +56,7 @@ class RecipeView(viewsets.ModelViewSet):
 class FavoriteView(APIView):
     permissions = [IsAuthenticatedOrReadOnly, ]
     filter_class = RecipeFilter
+
     @action(
         methods=[
             "post",
