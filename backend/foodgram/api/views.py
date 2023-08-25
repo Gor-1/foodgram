@@ -55,6 +55,7 @@ class RecipeView(viewsets.ModelViewSet):
 
 class FavoriteView(APIView):
     permissions = [IsAuthenticatedOrReadOnly, ]
+    serializer_class = serializers.FavoriteSerializer
 
     @action(
         methods=[
