@@ -55,7 +55,7 @@ class RecipeView(viewsets.ModelViewSet):
 
 class FavoriteView(APIView):
     permissions = [IsAuthenticatedOrReadOnly, ]
-
+    filter_class = RecipeFilter
     @action(
         methods=[
             "post",
@@ -102,6 +102,7 @@ class FavoriteView(APIView):
 class ShoppingCartViewSet(APIView):
 
     permission_classes = [IsAuthenticatedOrReadOnly, ]
+    filter_class = RecipeFilter
     pagination_class = None
 
     @action(
