@@ -126,12 +126,16 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         tags_data = validated_data.pop("tags")
         author = self.context.get("request").user
         recipe = models.Recipe.objects.create(author=author, **validated_data)
+        bulk_list = list()
         for ingredient in ingredients_data:
-            ingredient_model = ingredient["id"]
-            amount = ingredient["amount"]
-            models.IngredientInRecipe.objects.create(
-                ingredient=ingredient_model, recipe=recipe, amount=amount
+            bulk_list.append(
+                models.IngredientInRecipe(
+                    ingredient=ingredient["id"],
+                    recipe=recipe,
+                    amount=ingredient["amount"]
+                )
             )
+        models.IngredientInRecipe.objects.bulk_create(bulk_list)
         recipe.tags.set(tags_data)
         return recipe
 
@@ -140,12 +144,16 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         tags_data = validated_data.pop("tags")
         models.TagsInRecipe.objects.filter(recipe=instance).delete()
         models.IngredientInRecipe.objects.filter(recipe=instance).delete()
+        bulk_list = list()
         for ingredient in ingredients_data:
-            ingredient_model = ingredient["id"]
-            amount = ingredient["amount"]
-            models.IngredientInRecipe.objects.create(
-                ingredient=ingredient_model, recipe=instance, amount=amount
+            bulk_list.append(
+                models.IngredientInRecipe(
+                    ingredient=ingredient["id"],
+                    recipe=instance,
+                    amount=ingredient["amount"]
+                )
             )
+        models.IngredientInRecipe.objects.bulk_create(bulk_list)
         instance.name = validated_data.pop("name")
         instance.text = validated_data.pop("text")
         if validated_data.get("image") is not None:
