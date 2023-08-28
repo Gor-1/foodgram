@@ -10,27 +10,31 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, action
 from rest_framework.views import APIView
+from rest_framework import filters, mixins
 
 from recipes import models
 from api import serializers
-from .filters import IngredientFilter, RecipeFilter
+from .filters import  RecipeFilter
 from django.db.models import Sum
 
 
-class TagView(viewsets.ModelViewSet):
+class TagView(mixins.ListModelMixin,
+              mixins.RetrieveModelMixin,
+              viewsets.GenericViewSet):
+    permission_classes = (AllowAny, )
     queryset = models.Tag.objects.all()
     serializer_class = serializers.TagSerializer
-    permissions = [AllowAny, ]
     pagination_class = None
 
 
-class IngredientsView(viewsets.ModelViewSet):
+class IngredientsView(mixins.ListModelMixin,
+                      mixins.RetrieveModelMixin,
+                      viewsets.GenericViewSet):
     queryset = models.Ingredient.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     serializer_class = serializers.IngredientSerializer
-    filter_backends = [DjangoFilterBackend, ]
-    filter_class = IngredientFilter
-    search_fields = ["name", ]
+    filter_backends = [filters.SearchFilter, ]
+    search_fields = ["^name", ]
     pagination_class = None
 
 

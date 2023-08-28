@@ -1,6 +1,6 @@
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
-
+from django.core.exceptions import ValidationError
 from users.serializers import CustomUserSerializer
 from recipes import models
 
@@ -83,15 +83,10 @@ class AddIngredientToRecipeSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(
         queryset=models.Ingredient.objects.all()
     )
-    amount = serializers.IntegerField()
 
     class Meta:
         model = models.IngredientInRecipe
         fields = ("id", "amount")
-
-    def validate_amount(self, data):
-        if data <= 0:
-            raise serializers.ValidationError("Введите число больше 0!")
 
 
 class CreateRecipeSerializer(serializers.ModelSerializer):
@@ -119,6 +114,13 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     def validate_cooking_time(self, data):
         if data <= 0:
             raise serializers.ValidationError("Введите число больше 0")
+        return data
+
+    def validate_ingredients(self, data):
+        for item in data:
+            amount = item.get('amount')
+            if amount is not None and amount <= 0:
+                raise ValidationError("Введите число больше 0", data)
         return data
 
     def create(self, validated_data):
