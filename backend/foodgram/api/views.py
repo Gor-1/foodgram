@@ -14,7 +14,7 @@ from rest_framework import filters, mixins
 
 from recipes import models
 from api import serializers
-from .filters import  RecipeFilter
+from .filters import RecipeFilter
 from django.db.models import Sum
 
 
